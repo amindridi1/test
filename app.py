@@ -13,5 +13,5 @@ def index():
 def handle_message(msg):
     send(msg, broadcast=True)  # Broadcast to all clients
 
-if __name__ == '__main__':
-    socketio.run(app, debug=True)
+if __name__ == "__main__":
+    socketio.run(app, host="0.0.0.0", port=8000)
