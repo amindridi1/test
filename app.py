@@ -1,13 +1,18 @@
-from flask import Flask
-from flask_socketio import SocketIO
+from flask import Flask, render_template
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
 @app.route('/')
 def index():
-    return 'Welcome to the Flask-SocketIO chat application!'
+    return render_template('index.html')
 
-# Start the SocketIO server
+@socketio.on('message')
+def handle_message(data):
+    print('Received message: ' + data)
+    # Broadcast the message to all connected clients
+    emit('message', data, broadcast=True)
+
 if __name__ == "__main__":
     socketio.run(app, host="0.0.0.0", port=8000)
