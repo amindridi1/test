@@ -2,33 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Real-Time Chat</title>
-</head>
-<body>
-    <h1>Real-Time Chat</h1>
-    <ul id="messages"></ul>
-    <input id="message_input" autocomplete="off"/>
-    <button onclick="sendMessage()">Send</button>
-
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Room</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.min.js"></script>
     <script>
         const socket = io();
 
-        socket.on('connect', () => {
-            console.log('Connected');
-        });
-
-        socket.on('message', function(msg) {
-            let item = document.createElement('li');
-            item.textContent = msg;
-            document.getElementById('messages').appendChild(item);
-        });
-
         function sendMessage() {
-            const msg = document.getElementById('message_input').value;
-            socket.send(msg);
-            document.getElementById('message_input').value = '';
+            const message = document.getElementById('message-input').value;
+            socket.emit('message', message);
+            document.getElementById('message-input').value = '';
         }
+
+        socket.on('message', function(data) {
+            const messages = document.getElementById('messages');
+            messages.innerHTML += '<li>' + data + '</li>';
+        });
     </script>
+</head>
+<body>
+    <h1>Chat Room</h1>
+    <ul id="messages"></ul>
+    <input id="message-input" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
 </body>
 </html>
